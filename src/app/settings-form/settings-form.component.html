@@ -1,1 +1,32 @@
-<p>settings-form works!</p>
+<form [formGroup]="formGroup" fxLayout="column" fxLayoutAlign="start center"
+  fxLayoutGap="20px">
+  <h2 fxFlex>Settings:</h2>
+  <div fxFlex fxLayout="start center" fxLayoutGap="10px">
+    <mat-icon fxFlex>add_business</mat-icon>
+    <mat-form-field fxFlex>
+      <mat-label>Party Percentage</mat-label>
+      <input matInput type="number" placeholder="0" formControlName="partyPercentage"
+        min="0" max="100">
+      <mat-error *ngIf="hasError('partyPercentage', 'min')">Cannot be less than zero.
+      </mat-error>
+      <mat-error *ngIf="hasError('partyPercentage', 'max')">Cannot be more than 100%.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex fxLayout="start center" fxLayoutGap="10px">
+    <mat-icon fxFlex>family_restroom</mat-icon>
+    <mat-form-field fxFlex>
+      <mat-label>Party Size</mat-label>
+      <input matInput type="number" placeholder="5" formControlName="partySize" min="1"
+        max="10">
+      <mat-error *ngIf="hasError('partySize', 'min')">Cannot be less than one.
+      </mat-error>
+      <mat-error *ngIf="hasError('partySize', 'max')">Cannot be more than 100%.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex fxLayout="start center" fxLayoutGap="10px">
+    <mat-icon fxFlex class="gold">monetization_on</mat-icon>
+    <mat-checkbox fxFlex formControlName="convertToGold">Convert to Gold</mat-checkbox>
+  </div>
+</form>

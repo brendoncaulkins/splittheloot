@@ -8,3 +8,16 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.material-icons.platinum {
+  color: #424242;
+}
+.material-icons.gold {
+  color: #ede437;
+}
+.material-icons.silver {
+  color: #999999;
+}
+.material-icons.copper {
+  color: #b0770e;
+}

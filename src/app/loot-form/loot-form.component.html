@@ -1,1 +1,36 @@
-<p>loot-form works!</p>
+<form [formGroup]="formGroup" fxLayout="column" fxLayoutAlign="start center"
+  fxLayoutGap="20px">
+  <h2 fxFlex>The Loot:</h2>
+  <div fxFlex fxLayout="start center" fxLayoutGap="10px">
+    <mat-icon fxFlex class="platinum">local_play</mat-icon>
+    <mat-form-field fxFlex>
+      <mat-label>Platinum</mat-label>
+      <input matInput type="number" placeholder="0" formControlName="platinum" min="0">
+      <mat-error *ngIf="hasError('platinum', 'min')">Cannot be less than zero.</mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex fxLayout="start center" fxLayoutGap="10px">
+    <mat-icon fxFlex class="gold">monetization_on</mat-icon>
+    <mat-form-field fxFlex>
+      <mat-label>Gold</mat-label>
+      <input matInput type="number" placeholder="0" formControlName="gold" min="0">
+      <mat-error *ngIf="hasError('gold', 'min')">Cannot be less than zero.</mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex fxLayout="start center" fxLayoutGap="10px">
+    <mat-icon fxFlex class="silver">monetization_on</mat-icon>
+    <mat-form-field fxFlex>
+      <mat-label>Silver</mat-label>
+      <input matInput type="number" placeholder="0" formControlName="silver" min="0">
+      <mat-error *ngIf="hasError('silver', 'min')">Cannot be less than zero.</mat-error>
+    </mat-form-field>
+  </div>
+  <div fxFlex fxLayout="start center" fxLayoutGap="10px">
+    <mat-icon fxFlex class="copper">monetization_on</mat-icon>
+    <mat-form-field fxFlex>
+      <mat-label>Copper</mat-label>
+      <input matInput type="number" placeholder="0" formControlName="copper" min="0">
+      <mat-error *ngIf="hasError('copper', 'min')">Cannot be less than zero.</mat-error>
+    </mat-form-field>
+  </div>
+</form>

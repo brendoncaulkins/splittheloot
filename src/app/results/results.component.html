@@ -1,1 +1,16 @@
-<p>results works!</p>
+<div fxLayout="column" fxLayoutAlign="start center">
+  <h2 fxFlex>The Split:</h2>
+  <div *ngIf="(results$ | async)?.showParty" fxLayout="column">
+    <h3 fxFlex>Party Take:</h3>
+    <app-display-loot fxFlex [loot]="(results$ | async).partyShare"></app-display-loot>
+  </div>
+  <div fxLayout="column">
+    <h3 fxFlex>Party Member Share:</h3>
+    <app-display-loot fxFlex [loot]="(results$ | async).partyMemberShare">
+    </app-display-loot>
+  </div>
+  <div fxLayout="column">
+    <h3 fxFlex>Remaining:</h3>
+    <app-display-loot fxFlex [loot]="(results$ | async).leftOver"></app-display-loot>
+  </div>
+</div>
