@@ -5,10 +5,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { LootFormComponent } from './loot-form/loot-form.component'
+import { MaterialModule } from './material.module'
+import { ResultsComponent } from './results/results.component'
+import { SettingsFormComponent } from './settings-form/settings-form.component'
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FlexLayoutModule],
+  declarations: [
+    AppComponent,
+    LootFormComponent,
+    SettingsFormComponent,
+    ResultsComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FlexLayoutModule,
+    MaterialModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
