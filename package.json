@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "test:coverage": "ng test --code-coverage",
     "lint": "tslint --config tslint.json --project . -e \"**/{test,polyfills}.ts\"",
     "e2e": "ng e2e",
     "style": "import-sort -l \"**/{src,tests,e2e}/**/*.ts\" && prettier --check \"**/{src,tests,e2e}/**/*.{*css,ts}\"",
