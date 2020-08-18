@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --prod",
     "test": "ng test",
     "test:coverage": "ng test --code-coverage",
     "lint": "tslint --config tslint.json --project . -e \"**/{test,polyfills}.ts\"",
