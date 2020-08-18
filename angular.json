@@ -107,6 +107,15 @@
               "devServerTarget": "splittheloot:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "baseHref": "https://brendoncaulkins.github.io/splittheloot",
+            "noSilent": true,
+            "name": "Split the Loot",
+            "email": "support@splittheloot.com"
+          }
         }
       }
     }

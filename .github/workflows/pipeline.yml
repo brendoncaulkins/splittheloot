@@ -1,18 +1,14 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI/CD
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# Triggers the workflow on push or pull request events but only for the master branch
 on:
   push:
     branches: [master]
   pull_request:
     branches: [master]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build-test-archive:
+  build-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -36,31 +32,24 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./coverage/splittheloot/lcov.info
-      - name: zip site contents
-        run: zip -r _site.zip dist/splittheloot
-      - name: Archive site artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: siteArtifact
-          path: _site.zip
 
   publish:
     name: Publish (master branch only)
-    needs: [build-test-archive]
+    needs: [build-test]
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/master'}}
+    # if: ${{ github.ref == 'refs/heads/master'}}
     steps:
-      - name: Download site artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: siteArtifact
-      - name: unzip site contents
-        run: unzip _site.zip
+      - uses: actions/checkout@v1
 
-      - name: Push to gh-pages branch (master only)
-        if: ${{ github.ref == 'refs/heads/master'}}
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
         with:
-          commit_message: ${{ github.event.head_commit.message }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/splittheloot
+          node-version: 10.x
+
+      - name: npm install
+        run: npm ci
+
+      - name: deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run deploy
