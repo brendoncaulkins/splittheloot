@@ -12,7 +12,8 @@ import { MaterialModule } from './material.module'
 import { ResultsComponent } from './results/results.component'
 import { LootService } from './services/loot/loot.service'
 import { SettingsService } from './services/settings/settings.service'
-import { SettingsFormComponent } from './settings-form/settings-form.component'
+import { SettingsFormComponent } from './settings-form/settings-form.component';
+import { FooterComponent } from './footer/footer.component'
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { SettingsFormComponent } from './settings-form/settings-form.component'
     SettingsFormComponent,
     ResultsComponent,
     DisplayLootComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
