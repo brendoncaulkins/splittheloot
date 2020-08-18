@@ -64,4 +64,3 @@ jobs:
           commit_message: ${{ github.event.head_commit.message }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/splittheloot
-          publish_branch: master
