@@ -10,7 +10,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  build-test-archive:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -22,42 +22,29 @@ jobs:
 
     - name: npm install
       run: npm ci
-    
+
     - name: npm build
       run: npm run build:prod
-      
-    - name: zip site contents
-      run: zip -r _site.zip dist/splittheloot
-    - name: Archive site artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: siteArtifact
-        path: _site.zip
-  test:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-    - uses: actions/checkout@v1
 
-    - name: Use Node.js 10.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 10.x
+      - name: run tests, generate coverage report
+      run: npm run test:ci
 
-    - name: npm install
-      run: npm ci
-      
-    - name: run tests, generate coverage report
-      run: npm run test:coverage
-
-    - name: Coveralls
+      - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.COVERALLS_TOKEN }}
-        
+
+      - name: zip site contents
+        run: zip -r _site.zip dist/splittheloot
+      - name: Archive site artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: siteArtifact
+          path: _site.zip
+
   publish:
     name: Publish (master branch only)
-    needs: [build, test]
+    needs: [build-test-archive]
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/master'}}
     steps:
@@ -67,7 +54,7 @@ jobs:
         name: siteArtifact
     - name: unzip site contents
       run: unzip _site.zip
-      
+
     - name: Push to gh-pages branch (master only)
       if: ${{ github.ref == 'refs/heads/master'}}
       uses: peaceiris/actions-gh-pages@v3
@@ -76,4 +63,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build/splittheloot
         publish_branch: gh-pages
-    
+
