@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
+import { BaseFormComponent } from '../abstracts/base-form/base-form.component'
 import { initialSettings } from '../models/settings.model'
 import { SettingsService } from '../services/settings/settings.service'
 
@@ -16,18 +17,13 @@ import { SettingsService } from '../services/settings/settings.service'
     `,
   ],
 })
-export class SettingsFormComponent {
-  formGroup: FormGroup
-
+export class SettingsFormComponent extends BaseFormComponent {
   constructor(
     private settingsService: SettingsService,
     private formBuilder: FormBuilder
   ) {
-    this.formGroup = this.formBuilder.group({
-      partyPercentage: [0, [Validators.min(0), Validators.max(100)]],
-      partySize: [5, [Validators.min(1), Validators.max(10)]],
-      convertToGold: [false, []],
-    })
+    super()
+    this.formGroup = this.buildForm()
     this.formGroup.patchValue(initialSettings)
 
     this.formGroup.valueChanges.subscribe((settings) =>
@@ -35,7 +31,11 @@ export class SettingsFormComponent {
     )
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.formGroup?.get(control)?.hasError(errorName)
+  buildForm(): FormGroup {
+    return this.formBuilder.group({
+      partyPercentage: [0, [Validators.min(0), Validators.max(100)]],
+      partySize: [5, [Validators.min(1), Validators.max(10)]],
+      convertToGold: [false, []],
+    })
   }
 }

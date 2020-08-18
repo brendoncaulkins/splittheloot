@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { Observable, combineLatest } from 'rxjs'
 import { map } from 'rxjs/operators'
 
@@ -43,7 +43,7 @@ export function calculateLeftOver(loot: ILoot, divisor: number): ILoot {
 }
 
 export function calculatePercentage(loot: ILoot, percentage: number): ILoot {
-  // Use percentage to approximate a party
+  // Use percentage to approximate a party, cheat with party member share calculation
   const factor = Math.floor(100 / percentage)
   return calculateShare(loot, factor)
 }
@@ -58,12 +58,33 @@ export function calculateShare(loot: ILoot, partySize: number): ILoot {
   }
 }
 
+export function calculateResults(origLoot: ILoot, settings: ISettings): IResults {
+  const loot = settings.convertToGold ? convertToGold(origLoot) : origLoot
+  const showParty = settings.partyPercentage > 0
+  const partyShare = showParty
+    ? calculatePercentage(loot, settings.partyPercentage)
+    : noLoot
+
+  const remainder: ILoot = {
+    platinum: loot.platinum - partyShare.platinum,
+    gold: loot.gold - partyShare.gold,
+    silver: loot.silver - partyShare.silver,
+    copper: loot.copper - partyShare.copper,
+  }
+  return {
+    showParty,
+    partyShare,
+    partyMemberShare: calculateShare(remainder, settings.partySize),
+    leftOver: calculateLeftOver(remainder, settings.partySize),
+  }
+}
+
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.css'],
 })
-export class ResultsComponent implements OnInit {
+export class ResultsComponent {
   loot$: Observable<ILoot>
   settings$: Observable<ISettings>
 
@@ -77,32 +98,7 @@ export class ResultsComponent implements OnInit {
     this.settings$ = this.settingsService.current$
 
     this.results$ = combineLatest([this.loot$, this.settings$]).pipe(
-      map(([loot, settings]: [ILoot, ISettings]) => this.calculateResults(loot, settings))
+      map(([loot, settings]: [ILoot, ISettings]) => calculateResults(loot, settings))
     )
   }
-
-  calculateResults(origLoot: ILoot, settings: ISettings): IResults {
-    const loot = settings.convertToGold ? convertToGold(origLoot) : origLoot
-    const partyTake = settings.partyPercentage > 0
-    const partyShare = partyTake
-      ? calculatePercentage(loot, settings.partyPercentage)
-      : noLoot
-
-    const remainder: ILoot = {
-      platinum: loot.platinum - partyShare.platinum,
-      gold: loot.gold - partyShare.gold,
-      silver: loot.silver - partyShare.silver,
-      copper: loot.copper - partyShare.copper,
-    }
-    return {
-      showParty: partyTake,
-      partyShare: partyTake
-        ? calculatePercentage(loot, settings.partyPercentage)
-        : noLoot,
-      partyMemberShare: calculateShare(remainder, settings.partySize),
-      leftOver: calculateLeftOver(remainder, settings.partySize),
-    }
-  }
-
-  ngOnInit(): void {}
 }
