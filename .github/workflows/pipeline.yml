@@ -1,0 +1,79 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI/CD
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+
+    - name: npm install
+      run: npm ci
+    
+    - name: npm build
+      run: npm run build:prod
+      
+    - name: zip site contents
+      run: zip -r _site.zip dist/splittheloot
+    - name: Archive site artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: siteArtifact
+        path: _site.zip
+  test:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+
+    - name: npm install
+      run: npm ci
+      
+    - name: run tests, generate coverage report
+      run: npm run test:coverage
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.COVERALLS_TOKEN }}
+        
+  publish:
+    name: Publish (master branch only)
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/master'}}
+    steps:
+    - name: Download site artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: siteArtifact
+    - name: unzip site contents
+      run: unzip _site.zip
+      
+    - name: Push to gh-pages branch (master only)
+      if: ${{ github.ref == 'refs/heads/master'}}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        commit_message: ${{ github.event.head_commit.message }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/splittheloot
+        publish_branch: gh-pages
+    
