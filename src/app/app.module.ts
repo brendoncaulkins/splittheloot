@@ -6,13 +6,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { DisplayLootComponent } from './display-loot/display-loot.component'
 import { LootFormComponent } from './loot-form/loot-form.component'
 import { MaterialModule } from './material.module'
 import { ResultsComponent } from './results/results.component'
 import { LootService } from './services/loot/loot.service'
 import { SettingsService } from './services/settings/settings.service'
 import { SettingsFormComponent } from './settings-form/settings-form.component'
-import { DisplayLootComponent } from './display-loot/display-loot.component'
 
 @NgModule({
   declarations: [
