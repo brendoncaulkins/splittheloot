@@ -8,6 +8,7 @@
     "build:prod": "ng build --prod",
     "test": "ng test",
     "test:coverage": "ng test --code-coverage",
+    "test:ci": "ng test --watch=false --code-coverage --browsers=ChromeHeadless",
     "lint": "tslint --config tslint.json --project . -e \"**/{test,polyfills}.ts\"",
     "e2e": "ng e2e",
     "style": "import-sort -l \"**/{src,tests,e2e}/**/*.ts\" && prettier --check \"**/{src,tests,e2e}/**/*.{*css,ts}\"",
